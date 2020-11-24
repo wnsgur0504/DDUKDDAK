@@ -1,48 +1,60 @@
 package com.dd.member.main;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
-import java.sql.DriverManager;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.dd.db.DBManager;
+import com.dd.dto.Member;
 import com.dd.member.home.Home;
 import com.dd.member.login.Login;
+import com.dd.member.mypage.MyPage;
+import com.dd.member.recipe.RecipeDetailPanel;
 import com.dd.member.signup.SignUp;
 
 public class AppMain extends JFrame{
-	public static final int WIDTH = 600;
-	public static final int HEIGHT = 800;
+	public static final int WIDTH = 650;
+	public static final int HEIGHT = 900;
 	public static final int LOGIN=0;
 	public static final int HOME=1;
 	public static final int SIGN=2;
+	public static final int MYPAGE=3;
+	public static final int DETAILRECIPE=4;
 	
-	String pageName[] = {"Login", "HOME", "SignUp"};
+	String pageName[] = {"Login", "HOME", "SignUp", "MyPage", "DetailRecipe"};
 	JButton bt_name[] = new JButton[pageName.length];
 	Page page[] = new Page[pageName.length];
 	JPanel p_content; //페이지가 붙일 패널
 	JPanel user_container;//큰 틀
+	JLabel la_foot;
 	Connection con;
 	DBManager dm;
+	Member member;
+	long selectRecipe;
 	
 	public AppMain() {
 		user_container = new JPanel();
 		p_content = new JPanel();
 		dm = new DBManager();
-		
+		la_foot = new JLabel("DDukDDak All rights reserved");
 		//페이지 구성
 		page[0] = new Login(this);
 		page[1] = new Home(this);
 		page[2] = new SignUp(this);
-
+		page[3] = new MyPage(this);
+		page[4] = new RecipeDetailPanel(this);
+		
 		user_container.setPreferredSize(new Dimension(WIDTH, HEIGHT-10));
-
+		user_container.setBackground(Color.red);
 		for(int i=0;i<page.length;i++) {
 			p_content.add(page[i]);
 //			page[i].setVisible(false);
@@ -50,6 +62,8 @@ public class AppMain extends JFrame{
 		
 		user_container.add(p_content);
 		add(user_container);
+		add(la_foot, BorderLayout.SOUTH);
+		la_foot.setHorizontalAlignment(JLabel.RIGHT);
 		
 		setSize(WIDTH, HEIGHT);
 		setVisible(true);
@@ -80,16 +94,45 @@ public class AppMain extends JFrame{
 				page[i].setVisible(false);
 			}
 		}
+		if(index==HOME) {
+			((Home)page[index]).getRecipe();
+			((Home)page[index]).createRecipe();
+		}
+		if(index==MYPAGE) {
+			((MyPage) page[index]).getMember();
+		}
+		if(index==DETAILRECIPE) {
+			((RecipeDetailPanel)page[index]).setRecipe(selectRecipe);
+			
+		}
 	}
 	
+	public Member getMember() {
+		return member;
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
+	}
+
 	public Connection getConnetion() {
 		return con;
 	}
 	public DBManager getDBManager() {
 		return dm;
 	}
+	
+	public long getSelectRecipe() {
+		return selectRecipe;
+	}
+
+	public void setSelectRecipe(int selectRecipe) {
+		this.selectRecipe = selectRecipe;
+	}
+
 	public static void main(String[] args) {
 		new AppMain();
 	}
+	
 
 }

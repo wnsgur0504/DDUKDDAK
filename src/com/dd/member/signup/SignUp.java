@@ -20,15 +20,15 @@ import com.dd.member.main.AppMain;
 import com.dd.member.main.Page;
 
 public class SignUp extends Page {
-	JLabel la_signUp;
-	JLabel la_id, la_pw, la_pw2, la_name, la_nickname;
-	JTextField t_id, t_name, t_nickname;
-	JPasswordField t_pw, t_pw2;
-	JButton bt_idCheck, bt_nickCheck, bt_sign, bt_finish;
-	JPanel p_form, p_button;
-	boolean checkId = false;
-	boolean checkNick = false;
-	boolean checkPw = false;
+	protected JLabel la_signUp;
+	protected JLabel la_id, la_pw, la_pw2, la_name, la_nickname;
+	protected JTextField t_id, t_name, t_nickname;
+	protected JPasswordField t_pw, t_pw2;
+	protected JButton bt_idCheck, bt_nickCheck, bt_sign, bt_finish;
+	protected JPanel p_form, p_button;
+	protected boolean checkId = false;
+	protected boolean checkNick = false;
+	protected boolean checkPw = false;
 
 	public SignUp(AppMain appMain) {
 		super(appMain);

@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -12,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import com.dd.dto.Member;
 import com.dd.member.main.AppMain;
 import com.dd.member.main.Page;
 
@@ -21,11 +23,12 @@ public class Login extends Page{
 	JPasswordField t_pw;
 	JButton bt_login, bt_sign, bt_find;
 	JLabel la_logo, la_id, la_pw;
+	Member result;
 	
 	public Login(AppMain appMain) {
 		super(appMain);
-		t_id = new JTextField(15);
-		t_pw = new JPasswordField(15);
+		t_id = new JTextField("",15);
+		t_pw = new JPasswordField("",15);
 		bt_login = new JButton("로그인");
 		bt_find = new JButton("아이디/비밀번호찾기");
 		bt_sign = new JButton("회원가입");
@@ -52,7 +55,6 @@ public class Login extends Page{
 		p_pw.setPreferredSize(new Dimension(500, 50));
 		p_input.setPreferredSize(new Dimension(600, 300));
 		
-		
 		p_id.add(la_id);
 		p_id.add(t_id);
 		p_pw.add(la_pw);
@@ -68,8 +70,10 @@ public class Login extends Page{
 		add(p_input);
 		setVisible(true);
 		bt_login.addActionListener((e)->{
-			if(login(t_id.getText(), t_pw.getText())==1) {
+			login(t_id.getText(), t_pw.getText());
+			if(result!=null) {
 				appMain.showPage(AppMain.HOME);
+				appMain.setMember(result);
 			}else {
 				JOptionPane.showMessageDialog(Login.this, "정보가 일치하지 않습니다!");
 			}
@@ -80,25 +84,31 @@ public class Login extends Page{
 		});
 	}
 	
-	public int login(String id, String pw) {
+	public void login(String id, String pw) {
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
-		String sql="select count(*) as cnt from member where member_id=? and password=?";
-		int result=0;
+		String sql="select * from member where member_id=? and password=?";
 		
 		try {
+			result=new Member();
 			pstmt = getAppMain().getConnetion().prepareStatement(sql);
 			pstmt.setString(1, id);
 			pstmt.setString(2, pw);
 			rs = pstmt.executeQuery();
+			
 			if(rs.next()) {
-				result = rs.getInt("cnt");
+				result.setMember_idx(rs.getInt("member_idx"));
+				result.setMember_id(rs.getString("member_id"));
+				result.setPassword(rs.getString("password"));
+				result.setName(rs.getString("name"));
+				result.setNickname(rs.getString("nickname"));
+				result.setRegdate(rs.getString("regdate"));
+				System.out.println(rs.getString("regdate"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} 	finally {
 			getAppMain().getDBManager().close(pstmt, rs);
 		}
-		return result;
 	}
 }
