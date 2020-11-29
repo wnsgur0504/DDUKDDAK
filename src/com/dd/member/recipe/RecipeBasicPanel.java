@@ -1,4 +1,4 @@
-package com.dd.member.home;
+package com.dd.member.recipe;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.net.URL;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,9 +26,14 @@ public class RecipeBasicPanel extends JPanel {
 	RecipeBasic recipe;
 	Thread imgThread;
 	Image image;
-
+	URL url = this.getClass().getClassLoader().getResource("com/dd/res/dduk.PNG");
 	public RecipeBasicPanel(RecipeBasic recipe) {
-		image = ImageUtil.getCustomSize(ImageUtil.getImageFromURL(recipe.getImg_url()), 100, 85);
+		if(recipe.getImg_url()==null) {
+			
+			image = ImageUtil.getCustomSize(ImageUtil.getImageFromURL(url.toString()), 100, 85);
+		}else {
+			image = ImageUtil.getCustomSize(ImageUtil.getImageFromURL(recipe.getImg_url()), 100, 85);
+		}
 
 		p_img = new JPanel() {
 			public void paint(Graphics g) {

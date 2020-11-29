@@ -7,6 +7,8 @@ public class Member {
 	private String name;
 	private String nickname;
 	private String regdate;
+	private String email;
+	private int member_type_id;
 	
 	public int getMember_idx() {
 		return member_idx;
@@ -44,7 +46,17 @@ public class Member {
 	public void setRegdate(String regdate) {
 		this.regdate = regdate;
 	}
-	
-	
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public int getMember_type_id() {
+		return member_type_id;
+	}
+	public void setMember_type_id(int member_type_id) {
+		this.member_type_id = member_type_id;
+	}
 	
 }

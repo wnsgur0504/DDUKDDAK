@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,10 +27,13 @@ public class SignUp extends Page {
 	protected JPasswordField t_pw, t_pw2;
 	protected JButton bt_idCheck, bt_nickCheck, bt_sign, bt_finish;
 	protected JPanel p_form, p_button;
+	JLabel la_email;
+	JTextField t_email_id, t_email_address;
+	JComboBox<String> cb_Address;
 	protected boolean checkId = false;
 	protected boolean checkNick = false;
 	protected boolean checkPw = false;
-
+	String[] address = {"선택","google.com", "naver.com", "daum.net", "직접입력"};
 	public SignUp(AppMain appMain) {
 		super(appMain);
 		la_signUp = new JLabel("회원가입");
@@ -45,6 +49,10 @@ public class SignUp extends Page {
 		la_nickname = new JLabel("닉네임");
 		t_nickname = new JTextField(15);
 		bt_nickCheck = new JButton("닉네임확인");
+		la_email = new JLabel("이메일");
+		t_email_id = new JTextField(8);
+		t_email_address = new JTextField(8);
+		cb_Address = new JComboBox<String>(address);
 		bt_sign = new JButton("가입");
 		bt_finish = new JButton("취소");
 		p_form = new JPanel();
@@ -54,6 +62,7 @@ public class SignUp extends Page {
 		la_signUp.setPreferredSize(new Dimension(300, 250));
 		la_signUp.setHorizontalAlignment(JLabel.CENTER);
 		p_form.setPreferredSize(new Dimension(480, 350));
+		p_button.setPreferredSize(new Dimension(480, 350));
 		Dimension section = new Dimension(150, 30);
 		Dimension d = new Dimension(480, 30);
 		la_id.setPreferredSize(section);
@@ -61,6 +70,7 @@ public class SignUp extends Page {
 		la_pw2.setPreferredSize(section);
 		la_name.setPreferredSize(section);
 		la_nickname.setPreferredSize(section);
+		la_email.setPreferredSize(section);
 		t_id.setPreferredSize(d);
 		t_id.setEnabled(false);
 		t_pw.setPreferredSize(d);
@@ -68,6 +78,10 @@ public class SignUp extends Page {
 		t_name.setPreferredSize(d);
 		t_nickname.setPreferredSize(d);
 		t_nickname.setEnabled(false);
+		t_email_id.setPreferredSize(new Dimension(200, 30));
+		t_email_address.setPreferredSize(new Dimension(200, 30));
+		cb_Address.setPreferredSize(new Dimension(65, 30));
+		t_email_address.setEnabled(false);
 
 		p_form.add(la_id);
 		p_form.add(t_id);
@@ -81,6 +95,11 @@ public class SignUp extends Page {
 		p_form.add(la_nickname);
 		p_form.add(t_nickname);
 		p_form.add(bt_nickCheck);
+		p_form.add(la_email);
+		p_form.add(t_email_id);
+		p_form.add(new JLabel("@"));
+		p_form.add(t_email_address);
+		p_form.add(cb_Address);
 		p_button.add(bt_sign);
 		p_button.add(bt_finish);
 
@@ -107,6 +126,9 @@ public class SignUp extends Page {
 			} else if (t_name.getText().length() <2) {
 				JOptionPane.showMessageDialog(this, "이름입력해라");
 				return;
+			}else if(t_email_id.getText().length()<3 || t_email_address.getText().length()<0){
+				JOptionPane.showMessageDialog(this, "이메일입력해라");
+				return;
 			}else {
 				if(signUp()==1) {
 					JOptionPane.showMessageDialog(this, "가입성공");
@@ -130,6 +152,22 @@ public class SignUp extends Page {
 		bt_finish.addActionListener((e)->{
 			appMain.showPage(AppMain.LOGIN);
 		});
+		
+		cb_Address.addActionListener((e)->{
+			JComboBox cb = (JComboBox)e.getSource();
+			int index = cb.getSelectedIndex();
+			if(index == 0) {
+				t_email_address.setEnabled(false);
+				t_email_address.setText("");
+			}else if(index == address.length-1) {
+				t_email_address.setEnabled(true);
+				t_email_address.setText("");
+			}else {
+				t_email_address.setEnabled(false);
+				t_email_address.setText("");
+				t_email_address.setText((String)cb.getSelectedItem());
+			}
+		});
 	}
 
 	public void setCheckId(boolean checkId) {
@@ -151,13 +189,14 @@ public class SignUp extends Page {
 	public int signUp() {
 		PreparedStatement pstmt=null;
 		int result=0;
-		String sql = "insert into member(member_idx, member_id, password, name, nickname) values(seq_member.nextval, ?, ?, ?, ?)";
+		String sql = "insert into member(member_idx, member_id, password, name, nickname, email) values(seq_member.nextval, ?, ?, ?, ?, ?)";
 		try {
 			pstmt=getAppMain().getConnetion().prepareStatement(sql);
 			pstmt.setString(1, t_id.getText());
 			pstmt.setString(2, t_pw.getText());
 			pstmt.setString(3, t_name.getText());
 			pstmt.setString(4, t_nickname.getText());
+			pstmt.setString(5, t_email_id.getText()+"@"+t_email_address.getText());
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

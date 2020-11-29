@@ -15,10 +15,11 @@ import javax.swing.JPanel;
 
 import com.dd.db.DBManager;
 import com.dd.dto.Member;
+import com.dd.dto.RecipeBasic;
 import com.dd.member.home.Home;
 import com.dd.member.login.Login;
 import com.dd.member.mypage.MyPage;
-import com.dd.member.recipe.RecipeDetailPanel;
+import com.dd.member.recipe.RecipePanel;
 import com.dd.member.signup.SignUp;
 
 public class AppMain extends JFrame{
@@ -39,7 +40,7 @@ public class AppMain extends JFrame{
 	Connection con;
 	DBManager dm;
 	Member member;
-	long selectRecipe;
+	RecipeBasic selectRecipe;
 	
 	public AppMain() {
 		user_container = new JPanel();
@@ -51,7 +52,7 @@ public class AppMain extends JFrame{
 		page[1] = new Home(this);
 		page[2] = new SignUp(this);
 		page[3] = new MyPage(this);
-		page[4] = new RecipeDetailPanel(this);
+		page[4] = new RecipePanel(this);
 		
 		user_container.setPreferredSize(new Dimension(WIDTH, HEIGHT-10));
 		user_container.setBackground(Color.red);
@@ -102,7 +103,9 @@ public class AppMain extends JFrame{
 			((MyPage) page[index]).getMember();
 		}
 		if(index==DETAILRECIPE) {
-			((RecipeDetailPanel)page[index]).setRecipe(selectRecipe);
+			((RecipePanel)page[index]).createLabels(selectRecipe);
+			((RecipePanel)page[index]).createRecipe();
+			((RecipePanel)page[index]).createButton();
 			
 		}
 	}
@@ -122,12 +125,12 @@ public class AppMain extends JFrame{
 		return dm;
 	}
 	
-	public long getSelectRecipe() {
+	public RecipeBasic getSelectRecipe() {
 		return selectRecipe;
 	}
 
-	public void setSelectRecipe(int selectRecipe) {
-		this.selectRecipe = selectRecipe;
+	public void setSelectRecipe(RecipeBasic rb) {
+		this.selectRecipe = rb;
 	}
 
 	public static void main(String[] args) {

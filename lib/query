@@ -1,6 +1,6 @@
 create table recipe_detail(
 recipe_detail number primary key,
-recipe_id number,
+recipe_id number
 cooking_no number,
 cooking_dc varchar(500));
 
@@ -9,3 +9,14 @@ alter table recipe_detail add constraints fk_recipe_detail foreign key (recipe_i
 create sequence seq_recipe_detail 
 INCREMENT BY 1
 START WITH 1;
+
+
+create table recipe_bookmark(
+recipe_bookmark_id number primary key,
+recipe_id number,
+member_id number
+);
+
+create sequence seq_recipe_bookmark
+increment by 1
+start with 1;

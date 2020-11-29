@@ -26,8 +26,47 @@
 					"@dbeaver-connection-type@": "BASIC",
 					"@dbeaver-sid-service@": "SERVICE"
 				},
+				"auth-model": "oracle_native"
+			}
+		},
+		"oracle_thin-17614accf87-7ee2faf12ba0f8a9": {
+			"provider": "oracle",
+			"driver": "oracle_thin",
+			"name": "XE 2",
+			"save-password": true,
+			"show-system-objects": true,
+			"read-only": false,
+			"configuration": {
+				"host": "localhost",
+				"port": "1521",
+				"database": "XE",
+				"url": "jdbc:oracle:thin:@//localhost:1521/XE",
+				"home": "C:\\oraclexe\\app\\oracle\\product\\11.2.0\\server",
+				"type": "dev",
+				"provider-properties": {
+					"@dbeaver-check-schema-content@": "false",
+					"@dbeaver-always-show-dba@": "false",
+					"@dbeaver-always-use-dba-views@": "false",
+					"@dbeaver-meta-use-sys-schema@": "false",
+					"@dbeaver-meta-use-simple-constraints@": "false",
+					"@dbeaver-use-rule-hint@": "false",
+					"@dbeaver-use-meta-optimizer@": "false",
+					"@dbeaver-connection-type@": "BASIC",
+					"@dbeaver-sid-service@": "SERVICE"
+				},
 				"auth-model": "oracle_native",
 				"handlers": {}
+			}
+		}
+	},
+	"virtual-models": {
+		"oracle_thin-17614accf87-7ee2faf12ba0f8a9": {
+			"ADMIN": {
+				"@properties": {
+					"erd.diagram.state": {
+						"serialized": "<diagram version=\"1\" name=\"ADMIN\" time=\"202011300054\"><entities><data-source id=\"oracle_thin-17614accf87-7ee2faf12ba0f8a9\"><entity id=\"1\" name=\"MEMBER\" fq-name=\"ADMIN.&quot;MEMBER&quot;\" order=\"0\" x=\"20\" y=\"20\"><path name=\"ADMIN\"/></entity><entity id=\"2\" name=\"MEMBER_TYPE\" fq-name=\"ADMIN.MEMBER_TYPE\" order=\"1\" x=\"263\" y=\"89\"><path name=\"ADMIN\"/></entity><entity id=\"3\" name=\"RECIPE_BASIC\" fq-name=\"ADMIN.RECIPE_BASIC\" order=\"2\" x=\"495\" y=\"206\"><path name=\"ADMIN\"/></entity><entity id=\"4\" name=\"RECIPE_BOOKMARK\" fq-name=\"ADMIN.RECIPE_BOOKMARK\" order=\"3\" x=\"20\" y=\"274\"><path name=\"ADMIN\"/></entity><entity id=\"5\" name=\"RECIPE_DETAIL\" fq-name=\"ADMIN.RECIPE_DETAIL\" order=\"4\" x=\"263\" y=\"252\"><path name=\"ADMIN\"/></entity></data-source></entities><relations><relation name=\"SYS_C007242\" fq-name=\"ADMIN.&quot;MEMBER&quot;.SYS_C007242\" type=\"fk\" pk-ref=\"2\" fk-ref=\"1\"/></relations></diagram>"
+					}
+				}
 			}
 		}
 	},

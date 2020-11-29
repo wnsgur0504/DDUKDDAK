@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import com.dd.dto.Member;
 import com.dd.member.main.AppMain;
 import com.dd.member.main.Page;
+import com.dd.member.search.SearchAccount;
 
 public class Login extends Page{
 	JPanel p_input, p_button, p_id, p_pw;
@@ -23,7 +24,7 @@ public class Login extends Page{
 	JPasswordField t_pw;
 	JButton bt_login, bt_sign, bt_find;
 	JLabel la_logo, la_id, la_pw;
-	Member result;
+	Member member;
 	
 	public Login(AppMain appMain) {
 		super(appMain);
@@ -71,12 +72,16 @@ public class Login extends Page{
 		setVisible(true);
 		bt_login.addActionListener((e)->{
 			login(t_id.getText(), t_pw.getText());
-			if(result!=null) {
+			if(member!=null) {
 				appMain.showPage(AppMain.HOME);
-				appMain.setMember(result);
+				appMain.setMember(member);
 			}else {
 				JOptionPane.showMessageDialog(Login.this, "정보가 일치하지 않습니다!");
 			}
+		});
+		
+		bt_find.addActionListener((e)->{
+			new SearchAccount(getAppMain(), "아이디/비밀번호 찾기");
 		});
 		
 		bt_sign.addActionListener((e)->{
@@ -88,23 +93,25 @@ public class Login extends Page{
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		String sql="select * from member where member_id=? and password=?";
-		
+		Member result=null;
 		try {
-			result=new Member();
 			pstmt = getAppMain().getConnetion().prepareStatement(sql);
 			pstmt.setString(1, id);
 			pstmt.setString(2, pw);
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
+				result=new Member();
 				result.setMember_idx(rs.getInt("member_idx"));
 				result.setMember_id(rs.getString("member_id"));
 				result.setPassword(rs.getString("password"));
 				result.setName(rs.getString("name"));
 				result.setNickname(rs.getString("nickname"));
 				result.setRegdate(rs.getString("regdate"));
+				result.setEmail(rs.getString("email"));
 				System.out.println(rs.getString("regdate"));
 			}
+			member=result;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} 	finally {
